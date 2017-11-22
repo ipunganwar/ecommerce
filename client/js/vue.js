@@ -5,8 +5,22 @@ var app = new Vue({
     items : [],
     cart : [],
     total_harga : 0,
+    transaksi : [],
+    username : '',
+    password : ''
   },
   methods : {
+    getShoes (){
+      this.items.filter(item => {
+        console.log(item.category)
+        return item.category === 'shoes';
+      })
+    },
+    getAppereal (){
+      this.items.filter(item => {
+        return item.category === 'appereal';
+      })
+    },
   	getItem(){
   		axios.get('http://localhost:3000/api/items/list')
 		  .then(response => {
@@ -44,14 +58,31 @@ var app = new Vue({
             this.cart.push(obj)
           }
         }
-        console.log(this.cart)
+        // console.log(this.cart)
     },
     checkout(){
-      axios.post('http://localhost:3000/api/items/add', {
+      axios.post('http://localhost:3000/api/transactions/checkout', {
         cart: this.cart,
         total_harga: this.total_harga
       })
-      .then(function (response) {
+      .then(response => {
+        this.transaksi.push(response.data)
+        console.log(this.transaksi)
+       
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+      this.cart = []
+      this.total_harga = 0
+    },
+    login(){
+      axios.post('http://localhost:3000/api/customers/login', {
+        username: this.username,
+        password : this.password
+      })
+      .then(response => {
         console.log(response);
       })
       .catch(function (error) {
@@ -64,17 +95,7 @@ var app = new Vue({
   		this.getItem()
   },
   computed : {
-  	getShoes (){
-  		this.items.filter(item => {
-  			console.log(item.category)
-  			return item.category === 'shoes';
-  		})
-  	},
-  	getAppereal (){
-  		this.items.filter(item => {
-  			return item.category === 'appereal';
-  		})
-  	}
+  	
   }
 
 

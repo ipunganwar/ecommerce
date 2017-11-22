@@ -1,12 +1,31 @@
-const Transactions = require('../models/transactions')
-const Items = require('../models/item')
+const Transactions = require('../models/transaction')
 
-const add_to_cart = (req, res) => {
-	Items.find({name : req.body.name})
-	.then(result => { res.status(200).json(result)} )
-	.catch(err => { res.status(500).json(result)} )
+const checkout = (req, res) => {
+	let id_cart = req.body.cart.map(cart => {
+		return cart.id
+	}),
+	obj = {
+		itemslist : id_cart,
+		total : req.body.total_harga
+	}
+
+	Transactions.create(obj)
+	.then(result => {
+		console.log(result)
+		res.status(201).json(result)
+	})
 }
 
+const cek_transaksi = (req, res) => {
+	Transactions.find()
+	.populate('itemslist')
+	.exec((err, story) => {
+		res.json(story)
+	})
+}
+
+
 module.exports = {
-	add_to_cart
+	checkout,
+	cek_transaksi
 }

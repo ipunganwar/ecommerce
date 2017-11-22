@@ -4,14 +4,14 @@ let cart = []
 
 const add = (req, res) => {
 	console.log(req.body)
-	// Items.create(
-	// {
-	// 	name : req.body.name,
-	// 	quantity : req.body.quantity,
-	// 	price : req.body.price,
-	// 	category : req.body.category
-	// })
-	// .then(result => { res.status(201).json(result)})
+	Items.create(
+	{
+		name : req.body.name,
+		quantity : req.body.quantity,
+		price : req.body.price,
+		category : req.body.category
+	})
+	.then(result => { res.status(201).json(result)})
 }
 
 const list = (req, res) => {
